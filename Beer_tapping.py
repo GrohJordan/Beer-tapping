@@ -25,28 +25,30 @@ print(ser)
 i = 1
 with open("Bier_tapping_data.txt", "w+") as f:
 
-
-    while i != 512:
-        
-        data = ser.readline()
-        datastring = str(data)
-        wert = datastring[:-5]
-        wert = wert.replace("b'", "")
-        if wert != "":
-            print(wert)
-            f.write(wert)
-            f.write('\n\r')
-            i = i + 1
+while i != 512:
+    data = ser.readline()
+    datastring = str(data)
+    wert = datastring[:-5]
+    wert = wert.replace("b'", "")
+    if wert != "":
+        print(wert)
+        f.write(wert)
+        f.write('\n\r')
+        i = i + 1
         
         
-
-
 
 y  =  genfromtxt("Bier_tapping_data.txt")
+y = (((y*5)/1024)-0.5)*((15)/(0.8*5))
+a = sum(y[:120])/120
+y = y - a
+y = y * 6894.757
+
 x  =  [ e/4  for  e  in  range(511)]
 
-pyplot.plot(x, y, label = "Druck")
+pyplot.plot(x, y)
 pyplot.legend()
-pyplot.ylabel("Welle")
+pyplot.ylabel("Druck in Pa")
 pyplot.xlabel("Zeit in ms")
+pyplot.grid(True)
 pyplot.show()
